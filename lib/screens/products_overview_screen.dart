@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:happy_shop/widgets/app_drawer.dart';
 import 'package:provider/provider.dart';
 
+import '../screens/cart_screen.dart';
 import '../widgets/product_grid.dart';
 import '../provider/product.dart';
 import '../provider/cart.dart';
@@ -46,10 +48,13 @@ class _ProductOverviewScreenState extends State<ProductOverviewScreen> {
                 value: cart.getItemCount.toString(),
                 child: child!,
               ),
-              child: IconButton(onPressed: () {}, icon: Icon(Icons.shopping_cart)),
+              child: IconButton(onPressed: () {
+                Navigator.pushNamed(context, CartScreen.routeName);
+              }, icon: Icon(Icons.shopping_cart)),
             ),
         ],
       ),
+      drawer: AppDrawer(),
       body: ProductGrid(_showFavorite),
     );
   }

@@ -18,6 +18,7 @@ class _EditProductScreenState extends State<EditProductScreen> {
   final _imageUrlFocusNode = FocusNode();
   final _form = GlobalKey<FormState>();
   var _isInit = true;
+  var _isLoading=false;
   var _editedProduct =
       Product(id: '', description: '', title: '', imgUrl: '', price: 0);
   var initValues = {'title': '', 'description': '', 'price': '', 'imgUrl': ''};
@@ -30,10 +31,10 @@ class _EditProductScreenState extends State<EditProductScreen> {
   @override
   void didChangeDependencies() {
     if (_isInit) {
-      final productId = ModalRoute.of(context)!.settings.arguments as String;
+      final productId = ModalRoute.of(context)!.settings.arguments;
       if (productId != null) {
         _editedProduct =
-            Provider.of<Products>(context, listen: false).findByid(productId);
+            Provider.of<Products>(context, listen: false).findByid(productId.toString());
         initValues = {
           'title': _editedProduct.title,
           'description': _editedProduct.description,
@@ -66,13 +67,25 @@ class _EditProductScreenState extends State<EditProductScreen> {
     final isValid = _form.currentState!.validate();
     if (!isValid) return;
     _form.currentState!.save();
-    if(_editedProduct.id==null){
-Provider.of<Products>(context, listen: false).addProduct(_editedProduct);
+    setState(() {
+      _isLoading=true;
+    });
+    if(_editedProduct.id==''){
+Provider.of<Products>(context, listen: false).addProduct(_editedProduct).then((_){
+  setState(() {
+    _isLoading=false;
+  });
+  Navigator.of(context).pop();
+});
     }
     else{
       Provider.of<Products>(context, listen: false).updateProduct(_editedProduct.id,_editedProduct);
+      setState(() {
+    _isLoading=false;
+  });
+      Navigator.of(context).pop();
     }
-    Navigator.of(context).pop();
+    
   }
 
   @override
@@ -84,7 +97,7 @@ Provider.of<Products>(context, listen: false).addProduct(_editedProduct);
           IconButton(onPressed: _saveForm, icon: const Icon(Icons.save))
         ],
       ),
-      body: Padding(
+      body: _isLoading? const Center(child: CircularProgressIndicator(),): Padding(
         padding: const EdgeInsets.all(16),
         child: Form(
             key: _form,

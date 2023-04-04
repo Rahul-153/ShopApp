@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import './product.dart';
 
-class Products with ChangeNotifier{
-  List<Product> _items=[
+class Products with ChangeNotifier {
+  List<Product> _items = [
     Product(
       id: 'p1',
       title: 'Red Shirt',
@@ -36,19 +36,36 @@ class Products with ChangeNotifier{
     ),
   ];
 
-  List<Product> get items{
+  List<Product> get items {
     return [..._items];
   }
 
-  List<Product> get favouriteOnly{
+  List<Product> get favouriteOnly {
     return _items.where((pd) => pd.isFavourite).toList();
   }
 
-  Product findByid(String id){
-    return _items.firstWhere((pd) => pd.id==id);
+  Product findByid(String id) {
+    return _items.firstWhere((pd) => pd.id == id);
   }
-
-  void addProduct(){
+  void updateProduct(String productId,Product newProduct){
+    final productIdx=_items.indexWhere((pd) => pd.id==productId);
+    if(productIdx>=0){_items[productIdx]=newProduct;
+    notifyListeners();}else{
+      print('...');
+    }
+  }
+  void addProduct(Product product) {
+    final newProduct = Product(
+        id: DateTime.now().toString(),
+        description: product.description,
+        title: product.title,
+        imgUrl: product.imgUrl,
+        price: product.price);
+    _items.add(newProduct);
+    notifyListeners();
+  }
+  void deleteProducts(String id){
+    _items.removeWhere((prod) => prod.id==id);
     notifyListeners();
   }
 }

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:happy_shop/provider/products_provider.dart';
 import 'package:happy_shop/widgets/app_drawer.dart';
 import 'package:provider/provider.dart';
 
@@ -17,11 +18,32 @@ class ProductOverviewScreen extends StatefulWidget {
 
 class _ProductOverviewScreenState extends State<ProductOverviewScreen> {
   bool _showFavorite = false;
+  var _init = true;
+  var _isLoading = false;
+
+  @override
+  void didChangeDependencies() {
+    if (_init) {
+      setState(() {
+        _isLoading = true;
+      });
+      Provider.of<Products>(context).fetchAndSetProduct().then((value) {
+        setState(() {
+          _isLoading = false;
+        });
+      });
+    }
+    _init = false;
+    super.didChangeDependencies();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("My Shop",),
+        title: Text(
+          "My Shop",
+        ),
         actions: [
           PopupMenuButton(
               onSelected: (filterOptions selectedValue) {
@@ -44,18 +66,24 @@ class _ProductOverviewScreenState extends State<ProductOverviewScreen> {
                     ),
                   ]),
           Consumer<Cart>(
-              builder: (_, cart, child) => BadgeWidget(
-                value: cart.getItemCount.toString(),
-                child: child!,
-              ),
-              child: IconButton(onPressed: () {
-                Navigator.pushNamed(context, CartScreen.routeName);
-              }, icon: Icon(Icons.shopping_cart)),
+            builder: (_, cart, child) => BadgeWidget(
+              value: cart.getItemCount.toString(),
+              child: child!,
             ),
+            child: IconButton(
+                onPressed: () {
+                  Navigator.pushNamed(context, CartScreen.routeName);
+                },
+                icon: Icon(Icons.shopping_cart)),
+          ),
         ],
       ),
       drawer: AppDrawer(),
-      body: ProductGrid(_showFavorite),
+      body: _isLoading
+          ? const Center(
+              child: CircularProgressIndicator(),
+            )
+          : ProductGrid(_showFavorite),
     );
   }
 }

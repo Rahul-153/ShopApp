@@ -74,7 +74,9 @@ class Products with ChangeNotifier {
         price: product.price);
     _items.add(newProduct);
     notifyListeners();
-    } );
+    } ).catchError((error){
+      throw error;
+    });
   }
   void deleteProducts(String id){
     _items.removeWhere((prod) => prod.id==id);

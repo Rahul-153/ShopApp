@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import '../provider/cart.dart';
 import '../screens/product_detail_screen.dart';
 import '../provider/product.dart';
+import '../provider/products_provider.dart';
 
 class ProductItem extends StatelessWidget {
   @override
@@ -34,8 +35,8 @@ class ProductItem extends StatelessWidget {
               color: Theme.of(context).colorScheme.secondary,
               icon: Icon(
                   product.isFavourite ? Icons.favorite : Icons.favorite_border),
-              onPressed: () {
-                product.toggleFavorite();
+              onPressed: (){
+                  product.toggleFavorite();
               },
             ),
           ),

@@ -56,11 +56,11 @@ class _ProductOverviewScreenState extends State<ProductOverviewScreen> {
                 });
               },
               itemBuilder: (_) => [
-                    PopupMenuItem(
+                    const PopupMenuItem(
                       child: Text("Only Favorites"),
                       value: filterOptions.Favorites,
                     ),
-                    PopupMenuItem(
+                    const PopupMenuItem(
                       child: Text("Show All"),
                       value: filterOptions.All,
                     ),
@@ -74,11 +74,11 @@ class _ProductOverviewScreenState extends State<ProductOverviewScreen> {
                 onPressed: () {
                   Navigator.pushNamed(context, CartScreen.routeName);
                 },
-                icon: Icon(Icons.shopping_cart)),
+                icon: const Icon(Icons.shopping_cart)),
           ),
         ],
       ),
-      drawer: AppDrawer(),
+      drawer: const AppDrawer(),
       body: _isLoading
           ? const Center(
               child: CircularProgressIndicator(),

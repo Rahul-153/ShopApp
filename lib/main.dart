@@ -10,6 +10,7 @@ import './provider/products_provider.dart';
 import './screens/cart_screen.dart';
 import './screens/user_products_screen.dart';
 import './screens/edit_products.dart';
+import './screens/auth_screen.dart';
 
 void main() {
   runApp(const MyApp());
@@ -39,7 +40,7 @@ class MyApp extends StatelessWidget {
                 .colorScheme
                 .copyWith(primary: Colors.purple, secondary: Colors.deepOrange),
             fontFamily: 'Lato'),
-        home: ProductOverviewScreen(),
+        home: AuthScreen(),
         routes: {
           ProductDetailScreen.routeName: (context) => ProductDetailScreen(),
           CartScreen.routeName: (context) => CartScreen(),
